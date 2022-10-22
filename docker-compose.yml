@@ -1,0 +1,28 @@
+version: "2"
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  redis:
+    image: redis:6.2-alpine
+    container_name: "redis"
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass cGFzc3dvcmQK
+    volumes:
+      - /tmp/redis-persistence:/data
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: "rabbitmq"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - /tmp/rmq-persistence/:/var/lib/rabbitmq/
+      - /tmp/rmq-persistence/:/var/log/rabbitmq
+    networks:
+      - app-network

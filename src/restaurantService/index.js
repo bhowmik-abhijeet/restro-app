@@ -1,4 +1,4 @@
-const { RpcServer } = require('../rpc');
+const { RpcServer } = require('../lib/rpc');
 
 
 process.nextTick(async () => {

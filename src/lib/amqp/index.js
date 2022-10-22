@@ -1,10 +1,9 @@
-
 const amqp = require('amqplib');
 let conn;
 
 async function getConnection() {
     if (conn) return conn;
-    conn = await amqp.connect('amqp://guest:guest@rabbitmq');
+    conn = await amqp.connect('amqp://guest:guest@localhost');
     return conn;
 }
 
