@@ -43,22 +43,28 @@ var orderId = 1;
 var restroRpcClient;
 process.nextTick(function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        restroRpcClient = new RpcClient('restro', ['processOrder']);
-        restroRpcClient.init().then(function () { return console.log('restroRpcClient initialized...'); }).catch(function (err) { return console.log('restroRpcClient init failed', err); });
+        restroRpcClient = new RpcClient("restro", ["processOrder"]);
+        restroRpcClient
+            .init()
+            .then(function () { return console.log("restroRpcClient initialized..."); })
+            .catch(function (err) { return console.log("restroRpcClient init failed", err); });
         return [2 /*return*/];
     });
 }); });
-router.get('/', function (req, res) {
+router.get("/", function (req, res) {
     res.send(Object.values(OrdersDB));
 });
-router.post('/', function (req, res) {
+router.post("/", function (req, res) {
+    // # Add rate limit of 10 req/min
     var order = req.body;
     order.id = orderId;
-    order.status = 'preparing';
+    order.status = "preparing";
     OrdersDB[orderId++] = order;
-    restroRpcClient['processOrder'](order).then(function (response) {
+    restroRpcClient["processOrder"](order)
+        .then(function (response) {
         res.send(response);
-    }).catch(function (err) {
+    })
+        .catch(function (err) {
         res.status(500).send(err);
     });
     // publishToQueue(channel, Q.RESTRO, order);

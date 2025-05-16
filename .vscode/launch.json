@@ -12,6 +12,9 @@
             "-r",
             "ts-node/register"
         ],
+        "env": {
+          "NODE_ENV": "development"
+        },
         "args": [
             "${workspaceFolder}/src/index.js"
         ]

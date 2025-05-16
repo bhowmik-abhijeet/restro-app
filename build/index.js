@@ -12,6 +12,8 @@ var rateLimitStrategy = new TokenBucketRateLimitStrategy().init({
     unitTimeInMs: 5 * 1000, // 1 min
 });
 var rateLimiter = new RateLimiter({ strategy: rateLimitStrategy });
+var v = 1;
+var v2 = 1;
 var allowedAuthTokens = ["1234", "5432", "8976"];
 app.use(bodyParser.json());
 app.use(function (req, res, next) {

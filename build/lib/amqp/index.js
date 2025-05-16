@@ -35,18 +35,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var amqp = require('amqplib');
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var amqplib_1 = __importDefault(require("amqplib"));
+var config_1 = require("../../config");
+var channelModel;
 var conn;
 function getConnection() {
     return __awaiter(this, void 0, void 0, function () {
+        var cfg;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (conn)
                         return [2 /*return*/, conn];
-                    return [4 /*yield*/, amqp.connect('amqp://guest:guest@localhost')];
+                    cfg = config_1.config.get('amqp');
+                    return [4 /*yield*/, amqplib_1.default.connect("amqp://".concat(cfg.username, ":").concat(cfg.password, "@").concat(cfg.host, ":").concat(cfg.port))];
                 case 1:
-                    conn = _a.sent();
+                    channelModel = (_a.sent());
+                    conn = channelModel.connection;
                     return [2 /*return*/, conn];
             }
         });
@@ -61,7 +70,7 @@ module.exports.getChannel = function (queues, opt) {
                 case 0: return [4 /*yield*/, getConnection()];
                 case 1:
                     conn = _a.sent();
-                    return [4 /*yield*/, conn.createChannel()];
+                    return [4 /*yield*/, channelModel.createChannel()];
                 case 2:
                     channel = _a.sent();
                     queueAssertPromise = [];

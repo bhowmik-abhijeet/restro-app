@@ -1,10 +1,12 @@
 import { Lock as _Lock } from "./lock";
 import { Hash as _Hash } from "./hash";
+import { config } from "../../config";
 
 const redis = require("redis");
 
+const cfg = config.get('redis');
 export const client = redis.createClient({
-  url: "redis://default:password@localhost:6379",
+  url: `redis://${cfg.username}:${cfg.password}@${cfg.host}:${cfg.port}`,
 });
 
 process.nextTick(() => {

@@ -73,17 +73,25 @@ var TokenBucketRateLimitStrategy = /** @class */ (function () {
         Object.assign(this, options);
         return this;
     };
+    // 10:01
     TokenBucketRateLimitStrategy.prototype.refill = function (bucket) {
         var timeElapsedSinceLastRefill = Date.now() - bucket.lastRefillTs;
         var numberOfUnitTimeElapsed = timeElapsedSinceLastRefill / this.unitTimeInMs;
         if (numberOfUnitTimeElapsed > 1) {
             // atleast 1 unit time should have elapsed
-            var tokensToRefill = Math.floor(this.refillPerUnitTime * numberOfUnitTimeElapsed);
-            bucket.tokens = min(bucket.tokens + tokensToRefill, this.bucketSizePerKey);
+            var tokensToRefill = Math.floor(
+            // 24
+            this.refillPerUnitTime * numberOfUnitTimeElapsed);
+            bucket.tokens = min(
+            // 5
+            bucket.tokens + tokensToRefill, // 0 + 24
+            this.bucketSizePerKey // 5
+            );
             bucket.lastRefillTs = Date.now();
         }
         return bucket;
     };
+    // 10:00
     TokenBucketRateLimitStrategy.prototype.fill = function () {
         var bucket = {
             tokens: this.bucketSizePerKey,

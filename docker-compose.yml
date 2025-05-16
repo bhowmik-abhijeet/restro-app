@@ -5,15 +5,38 @@ networks:
     driver: bridge
 
 services:
+  
+  restro-app:
+    image: restro-app:v1
+    container_name: "restro-app"
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      REDIS_PORT: 6379
+      REDIS_HOST: redis
+      REDIS_PASSWORD: admin
+      REDIS_USERNAME: admin
+
+      AMQP_PORT: 5672
+      AMQP_HOST: rabbitmq
+      AMQP_PASSWORD: admin
+      AMQP_USERNAME: admin
+    networks:
+      - app-network
+
   redis:
     image: redis:6.2-alpine
     container_name: "redis"
     restart: always
     ports:
       - "6379:6379"
-    command: redis-server --save 20 1 --loglevel warning --requirepass cGFzc3dvcmQK
+    command: redis-server --aclfile /usr/local/etc/redis/users.acl --save 20 1 --loglevel warning --requirepass cGFzc3dvcmQK
     volumes:
       - /tmp/redis-persistence:/data
+      - ./redis.acl:/usr/local/etc/redis/users.acl
+    networks:
+      - app-network
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -21,6 +44,9 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
     volumes:
       - /tmp/rmq-persistence/:/var/lib/rabbitmq/
       - /tmp/rmq-persistence/:/var/log/rabbitmq

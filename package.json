@@ -8,6 +8,7 @@
     "build": "rm -rf build && npx tsc",
     "server": "node build",
     "serve": "npm run build && npm run server",
+    "serve-dev": "npm run build && cp dev.env ./build && NODE_ENV=development npm run server",
     "start:dev": "nodemon"
   },
   "author": "",
@@ -15,10 +16,14 @@
   "dependencies": {
     "amqplib": "^0.10.3",
     "body-parser": "^1.20.0",
+    "convict": "^6.2.4",
+    "dotenv": "^16.5.0",
     "express": "^5.0.0-beta.1",
     "redis": "4.0.6"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.7",
+    "@types/convict": "^6.1.6",
     "@types/node": "^18.11.0",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
