@@ -2,7 +2,8 @@ import convict from 'convict';
 import path from 'path';
 import dotenv from 'dotenv';
 
-if (process.env.NODE_ENV !== 'development') {
+if (process.env.NODE_ENV == 'development') {
+    console.warn("Loading environment variables from .env file")
     // Load environment variables from .env file
     dotenv.config({ path: path.resolve(__dirname, './dev.env') });
 }

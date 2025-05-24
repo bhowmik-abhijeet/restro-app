@@ -9,7 +9,7 @@
     "server": "node build",
     "serve": "npm run build && npm run server",
     "serve-dev": "npm run build && cp dev.env ./build && NODE_ENV=development npm run server",
-    "start:dev": "nodemon"
+    "start:dev": "NODE_ENV=development nodemon"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +19,7 @@
     "convict": "^6.2.4",
     "dotenv": "^16.5.0",
     "express": "^5.0.0-beta.1",
+    "morgan": "^1.10.0",
     "redis": "4.0.6"
   },
   "devDependencies": {

@@ -15,6 +15,7 @@ export class RateLimiter {
       .forward(req.id)
       .then(next)
       .catch((err) => {
+        console.warn("WARNING: Rate-limiting ", req.id);
         res.status(429).send(err.message);
       });
   }

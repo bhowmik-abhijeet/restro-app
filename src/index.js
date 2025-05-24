@@ -1,4 +1,5 @@
 const express = require("express");
+const morgan = require('morgan');
 const app = express();
 const port = 3000;
 const orderService = require("./orderService");
@@ -13,15 +14,11 @@ const rateLimitStrategy = new TokenBucketRateLimitStrategy().init({
   unitTimeInMs: 5 * 1000, // 1 min
 });
 const rateLimiter = new RateLimiter({ strategy: rateLimitStrategy });
-const v = 1;
-const v2 = 1;
-const allowedAuthTokens = ["1234", "5432", "8976"];
 
 app.use(bodyParser.json());
+app.use(morgan(':remote-addr :method :url :status :res[content-length] - :response-time ms'));
 app.use((req, res, next) => {
-  req.id = req.headers["authorization"];
-  if (allowedAuthTokens.indexOf(req.id) === -1)
-    return res.status(401).send("Unauthorized");
+  req.id = req.ip;
   next();
 });
 

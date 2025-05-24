@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restro-app
+  labels:
+    app: restro-app
+    service: restro-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: restro-app
+  template:
+    metadata:
+      labels:
+        app: restro-app
+        service: restro-app
+    spec:
+      nodeSelector:
+        region: sa-central
+      containers:
+      - name: restro-app
+        image: abhijeetbhowmik/restro-app:latest
+        imagePullPolicy: Always
+        env:
+          - name: REDIS_PORT
+            value: "6379"
+          - name: REDIS_HOST
+            value: redis-service
+          - name: REDIS_PASSWORD
+            value: admin
+          - name: REDIS_USERNAME
+            value: admin
+
+          - name: AMQP_PORT
+            value: "5672"
+          - name: AMQP_HOST
+            value: rabbitmq-service
+          - name: AMQP_PASSWORD
+            value: admin
+          - name: AMQP_USERNAME
+            value: admin
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "300m"
+        ports:
+        - containerPort: 3000
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: restro-app-service
+spec:
+  selector:
+    service: restro-app
+  ports:
+    - protocol: TCP
+      port: 80        # Service port
+      targetPort: 3000  # Container port
+  type: LoadBalancer     # Internal service (default)
